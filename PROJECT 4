@@ -1,0 +1,6 @@
+C:\Windows\system32>D:
+D:\>mkdir Healthcek
+p:\>systeminfo > Healthcek\ Systeminfo.txt
+D:\>chkdsk > Healthcek\Checkdisk.txt
+D:\>tasklist >Healthcek\Tasklist.txt
+D:\>
