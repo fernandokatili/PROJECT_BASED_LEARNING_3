@@ -1,0 +1,288 @@
+#Script simulasi.bat
+@echo off 
+echo simulasi membuat struktur folder... 
+echo cd /d C:\Users\ferna\Desktop 
+cd /d C:\Users\ferna\Desktop
+mkdir simulasidriveD 
+cd simulasidriveD 
+for %%i in (1 2 3 4 5 6 7 8 9 10) do ( 
+	mkdir folder_%%i
+	cd folder_%%i
+	mkdir SubfolderA SubfolderB SubfolderC
+	cd SubfolderA
+	echo file contoh txt > txt%%i.txt
+	echo configuration > configuration%%i.ini
+	echo Judul Dokumen > Dokumen%%i.docx
+	echo > Database%%i.db
+	echo pedeef > pdf%%i.pdf
+	echo > Python%%i.py
+	cd ..
+	cd SubfolderB
+	echo file contoh txt > txt%%i.txt
+	echo configuration > configuration%%i.ini
+	echo Judul Dokumen > Dokumen%%i.docx
+	echo > Database%%i.db
+	echo pedeef > pdf%%i.pdf
+	echo > Python%%i.py
+	cd ..
+	cd SubfolderC
+	echo file contoh txt > txt%%i.txt
+	echo configuration > configuration%%i.ini
+	echo Judul Dokumen > Dokumen%%i.docx
+	echo > Database%%i.db
+	echo pedeef > pdf%%i.pdf
+	echo > Python%%i.py
+	cd ..
+	cd ..
+)
+
+echo simulasi selesai dibuat.
+pause
+
+
+
+#Script Recovery.bat
+@echo off
+echo PROSES DATA RECOVERY...
+echo =====================================
+setlocal enabledelayedexpansion
+
+set sumber=%USERPROFILE%\Desktop\simulasidriveD
+set tujuan=%USERPROFILE%\Desktop\SimulasiDrive_C
+
+set backup=Backup_%date:/=-%_%time::=-%
+mkdir "%tujuan%\%backup%"
+
+echo Sumber  : %sumber%
+echo Tujuan : %tujuan%\%backup%
+echo.
+
+echo Menghitung total file terlebih dahulu...
+set total=0
+
+
+for /r "%sumber%" %%f in (*.*) do (
+    set /a total+=1
+)
+
+echo Proses menyalin data...
+xcopy "%sumber%" "%tujuan%\%backup%" /E /H /C /I /Y > "%tujuan%\%backup%\recovery_log.txt"
+echo Total file yang akan disalin: %total%
+echo.
+
+echo.
+echo =====================================
+echo RECOVERY SELESAI
+echo File berhasil disalin: %total%
+pause
+
+
+#Script 2_recovery.bat
+@echo off
+echo PROSES DATA RECOVERY...
+echo =====================================
+setlocal enabledelayedexpansion
+
+
+set sumber=%USERPROFILE%\Desktop\SimulasiDriveD
+set tujuan=%USERPROFILE%\Desktop\SimulasiDrive_C
+set backup=Backup_%date:/=-%_%time::=-%
+mkdir "%tujuan%\%backup%"
+
+echo Sumber  : %sumber%
+echo Tujuan  : %tujuan%\%backup%
+echo.
+
+set total=0
+for /r "%sumber%" %%f in (*.pdf *.docx) do (
+    set /a total+=1
+)
+
+echo Total file yang akan disalin: %total%
+echo.
+
+
+set count=0
+echo FILE SIZE LOG > "%tujuan%\%backup%\filesize_log.txt"
+set total_size=0
+
+for /r "%sumber%" %%f in (*.pdf *.docx) do (
+    set /a count+=1
+    echo [!count! / %total%] Copy: %%~nxf
+
+    set "relpath=%%~dpf"
+    set "relpath=!relpath:%sumber%=!"
+    mkdir "%tujuan%\%backup%!relpath!" 2>nul
+
+    copy "%%f" "%tujuan%\%backup%!relpath!" >nul
+
+    for %%s in ("%tujuan%\%backup%!relpath!%%~nxf") do (
+        echo %%~nxf  -  %%~zs bytes >> "%tujuan%\%backup%\filesize_log.txt"
+	set /a total_size+=%%~zs
+    )
+)
+
+echo.
+echo Total Ukuran Semua File(*pdf, *docx): "%total_size%"
+echo Total Ukuran Semua File(*pdf, *docx): "%total_size%" >> "%tujuan%\%backup%\filesize_log.txt"
+echo.
+echo File size tersimpan di filesize_log.txt
+echo.
+
+echo Membuat file ZIP...
+powershell -command ^
+"Compress-Archive -Path '%tujuan%\%backup%\*' -DestinationPath '%tujuan%\%backup%.zip' -Force"
+
+echo File ZIP dibuat: %backup%.zip
+echo.
+echo =====================================
+echo            BACKUP SELESAI
+echo =====================================
+pause
+
+
+#Script BackupSystem.bat
+@echo off
+title ALL-IN-ONE BACKUP SYSTEM
+setlocal enabledelayedexpansion
+
+REM ================================
+REM KONFIGURASI EMAIL (EDIT BAGIAN INI)
+REM ================================
+set EMAIL_TO=fernandokatili19@gmail.com
+set EMAIL_FROM=fernandosaputrakatili@gmail.com
+set EMAIL_PASS=rfri jcox eyzi aekn
+
+REM ================================
+REM LOKASI BACKUP
+REM ================================
+set SRC=%USERPROFILE%\Desktop\SimulasiDriveD
+set DST=%USERPROFILE%\Desktop\BackupResults
+mkdir "%DST%" 2>nul
+
+:MENU
+cls
+echo ==============================================
+echo           ALL-IN-ONE BACKUP SYSTEM
+echo ==============================================
+echo 1. Selective Backup
+echo 2. Incremental Backup
+echo 3. Scheduled Backup
+echo 4. Exit
+echo ==============================================
+set /p pilih=Pilih menu (1-4): 
+
+if "%pilih%"=="1" goto SELECTIVE
+if "%pilih%"=="2" goto INCREMENTAL
+if "%pilih%"=="3" goto SCHEDULE
+if "%pilih%"=="4" exit
+
+goto MENU
+
+
+
+REM ============================================================
+REM 1) SELECTIVE BACKUP
+REM ============================================================
+:SELECTIVE
+cls
+echo SELECTIVE BACKUP
+echo ----------------------------------------------------
+echo Folder tersedia di: %SRC%
+dir "%SRC%" /b /ad
+echo ----------------------------------------------------
+set /p folder=Masukkan nama folder (atau * untuk semua): 
+
+set OUT=%DST%\Selective_%date:/=-%_%time::=-%
+mkdir "%OUT%"
+
+echo Menyalin folder: %folder%
+xcopy "%SRC%\%folder%" "%OUT%\%folder%" /E /H /C /I /Y >nul
+
+echo.
+echo Backup selesai. Lokasi: %OUT%
+
+REM ============== EMAIL NOTIF OTOMATIS ==============
+powershell -Command ^
+"Send-MailMessage -To '%EMAIL_TO%' -From '%EMAIL_FROM%' -Subject 'Selective Backup selesai' -Body 'Selective backup folder %folder% selesai. Output: %OUT%' -SmtpServer 'smtp.gmail.com' -Port 587 -UseSsl -Credential (New-Object System.Management.Automation.PSCredential('%EMAIL_FROM%',(ConvertTo-SecureString '%EMAIL_PASS%' -AsPlainText -Force)))"
+
+echo Email notifikasi terkirim!
+pause
+goto MENU
+
+
+
+REM ============================================================
+REM 2) INCREMENTAL BACKUP
+REM ============================================================
+:INCREMENTAL
+cls
+echo INCREMENTAL BACKUP
+echo ----------------------------------------------------
+
+set SNAP=%DST%\last_snapshot.txt
+set NEWSNAP=%DST%\new_snapshot.txt
+set OUT=%DST%\Incremental_%date:/=-%_%time::=-%
+mkdir "%OUT%" 2>nul
+
+echo Membuat snapshot baru...
+(for /r "%SRC%" %%f in (*.*) do echo %%~zf %%f) > "%NEWSNAP%"
+
+if not exist "%SNAP%" (
+    echo Snapshot pertama, melakukan FULL backup...
+    xcopy "%SRC%" "%OUT%" /E /H /C /I /Y >nul
+    copy "%NEWSNAP%" "%SNAP%" >nul
+
+    powershell -Command ^
+    "Send-MailMessage -To '%EMAIL_TO%' -From '%EMAIL_FROM%' -Subject 'Incremental Backup (Full) selesai' -Body 'Full backup pertama selesai. Output: %OUT%' -SmtpServer 'smtp.gmail.com' -Port 587 -UseSsl -Credential (New-Object PSCredential('%EMAIL_FROM%',(ConvertTo-SecureString '%EMAIL_PASS%' -AsPlainText -Force)))"
+
+    echo Email notifikasi terkirim!
+    pause
+    goto MENU
+)
+
+echo File yang berubah:
+echo.
+for /f "tokens=1,*" %%a in (%NEWSNAP%) do (
+    find "%%b" "%SNAP%" | find "%%a" >nul
+    if errorlevel 1 (
+        echo Updated: %%b
+        copy "%%b" "%OUT%" >nul
+    )
+)
+
+copy "%NEWSNAP%" "%SNAP%" >nul
+
+echo.
+echo Incremental backup selesai. Output: %OUT%
+
+REM ============== EMAIL NOTIF ==============
+powershell -Command ^
+"Send-MailMessage -To '%EMAIL_TO%' -From '%EMAIL_FROM%' -Subject 'Incremental Backup selesai' -Body 'Incremental backup selesai. Output: %OUT%' -SmtpServer 'smtp.gmail.com' -Port 587 -UseSsl -Credential (New-Object PSCredential('%EMAIL_FROM%',(ConvertTo-SecureString '%EMAIL_PASS%' -AsPlainText -Force)))"
+
+echo Email notifikasi terkirim!
+pause
+goto MENU
+
+
+
+REM ============================================================
+REM 3) SCHEDULED BACKUP
+REM ============================================================
+:SCHEDULE
+cls
+echo SCHEDULED BACKUP
+echo ----------------------------------------------------
+set /p menit=Backup otomatis setiap berapa menit? : 
+
+schtasks /create /tn "AutoBackupUAS" /sc minute /mo %menit% /tr "%~dp0BackupSystem_AllInOne.bat" /f
+
+echo Jadwal backup dibuat setiap %menit% menit.
+
+REM ============== EMAIL NOTIF ==============
+powershell -Command ^
+"Send-MailMessage -To '%EMAIL_TO%' -From '%EMAIL_FROM%' -Subject 'Scheduled Backup Dibuat' -Body 'Scheduled backup telah dibuat setiap %menit% menit.' -SmtpServer 'smtp.gmail.com' -Port 587 -UseSsl -Credential (New-Object PSCredential('%EMAIL_FROM%',(ConvertTo-SecureString '%EMAIL_PASS%' -AsPlainText -Force)))"
+
+echo Email notifikasi terkirim!
+pause
+goto MENU
