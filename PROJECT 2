@@ -1,6 +1,7 @@
-C:\Users\ferna>
+
 C:\Users\ferna>ipconfig \all
 C:\Users\ferna>ping 8.8.8.8
 C:\Users\ferna>ping google.com
 C:\Users\ferna>tracert google.com
 C:\Users\ferna>netstat -an
+
