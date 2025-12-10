@@ -1,0 +1,23 @@
+C:\Users\ferna>D:
+D:\>mkdir MyFiles
+D:\>cd MyFiles
+D: \MyFiles>mkdir Documents Pictures Videos Music Mata_kuliah
+D:\MyFiles>cd ..
+D:\>move data. txt MyFiles/Documents
+1 file(s) moved.
+D:\>move foto.jpg MyFiles/Pictures
+1 file(s) moved.
+D:\>move video. mp4 MyFiles/Videos
+1 file(s) moved.
+D:\>move music.mp3 MyFiles/Music
+1 file(s) moved.
+D:\>cd MyFiles
+D: \MyFiles>cd Mata_kuliah
+D: \MyFiles\Mata_kuliah>mkdir Algoritma Sistem_operasi Logika_mtk PTSI Agama
+D:\MyFiles\Mata_kuliah> cd ..
+D: \MyFiles>cd ..
+D:\>move algoritma . txt MyFiles/Mata_kuliah/Algoritma
+1 file(s) moved.
+D:\>move sistem_operasi.txt MyFiles/Mata_kuliah/Sistem_operasi
+1 file(s) moved.
+D:\>move logika_mtk.txt MyFiles/Mata_kuliah/ Logika_mtk
