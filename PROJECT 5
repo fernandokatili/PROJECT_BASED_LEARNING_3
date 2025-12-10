@@ -1,0 +1,6 @@
+C:\Users\ferna>D:
+b:\>echo @echo off > startup.bat
+b:\>echo color 0A >> startup.bat
+b:\>echo prompt $P$G >> startup.bat
+b:\>.\startup. bat
+b:\>
