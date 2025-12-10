@@ -30,14 +30,15 @@ b:\>tree
 Folder PATH listing for vol ume DATA
 Volume serial number is 4CB1-0542
 D:.
-MyFiles
--Documents
--Mata_kuliah
--Agama
--Algoritma
--Logika_mtk
--PTSI
--Sistem_operasi
-Music
--Pictures
--Videos
+|-- MyFiles
+     |------Documents
+     |------Mata_kuliah
+     |       |----Agama
+     |       |----Algoritma
+     |       |----Logika_mtk
+     |       |----PTSI
+     |       |----Sistem_operasi
+     |------Music
+     |------Pictures
+     |------Videos
+
