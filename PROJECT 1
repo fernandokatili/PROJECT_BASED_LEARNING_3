@@ -21,3 +21,23 @@ D:\>move algoritma . txt MyFiles/Mata_kuliah/Algoritma
 D:\>move sistem_operasi.txt MyFiles/Mata_kuliah/Sistem_operasi
 1 file(s) moved.
 D:\>move logika_mtk.txt MyFiles/Mata_kuliah/ Logika_mtk
+1 file(s) moved.
+D:\>move ptsi.txt MyFiles/Mata_kuliah/PTSI
+1 file(s) moved.
+b:\>move agama.txt MyFiles/Mata_kuliah/Agama
+1 file(s) moved.
+b:\>tree
+Folder PATH listing for vol ume DATA
+Volume serial number is 4CB1-0542
+D:.
+MyFiles
+-Documents
+-Mata_kuliah
+-Agama
+-Algoritma
+-Logika_mtk
+-PTSI
+-Sistem_operasi
+Music
+-Pictures
+-Videos
